@@ -3,10 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CompanyContactController;
 use App\Models\User;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+// use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //register an account
-Route::post('register',[LoginController::class,'store']);
+Route::post('register',[AuthenticationController::class,'store']);
+
+//return personal token
+Route::post('makeToken',[AuthenticationController::class,'makeToken']);
 
 Route::group(['middleware' => ['auth:sanctum']],function() {
     Route::get('company',[CompanyController::class,'index']);
@@ -32,24 +37,18 @@ Route::group(['middleware' => ['auth:sanctum']],function() {
     Route::put('company/{company}',[CompanyController::class,'update']);
     Route::post('company',[CompanyController::class,'store']);
     Route::delete('company/{company}',[CompanyController::class,'destroy']);
-});
 
-Route::post('/login', function (Request $request) {
+    Route::get('contact',[ContactController::class,'index']);
+    Route::get('contact/{contact}',[ContactController::class,'show']);
+    Route::put('company/{company}',[ContactController::class,'update']);
+    Route::post('contact',[ContactController::class,'store']);
+    Route::delete('contact/{contact}',[ContactController::class,'destroy']);
 
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'device_name' => 'required',
-    ]);
- 
-    $user = User::where('email', $request->email)->first();
+    Route::get('company-contacts',[CompanyContactController::class,'index']);
+    Route::get('company-contacts/{id}',[CompanyContactController::class,'show']);
+    Route::put('company-contacts/{id}',[CompanyContactController::class,'update']);
+    Route::post('company-contacts',[CompanyContactController::class,'store']);
+    Route::delete('company-contacts/{id}',[CompanyContactController::class,'destroy']);
 
- 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
-        ]);
-    }
- 
-    // return $user->createToken($request->device_name)->plainTextToken;
+    Route::delete('deleteToken',[AuthenticationController::class,'destroy']);
 });

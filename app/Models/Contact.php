@@ -10,4 +10,9 @@ class Contact extends Model
     use HasFactory;
 
     public $incrementing = false;
+
+    public function companycontacts($id)
+    {
+        return CompanyContact::where('company_id',addslashes($id))->get();
+    }
 }

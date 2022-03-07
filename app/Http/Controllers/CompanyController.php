@@ -63,7 +63,6 @@ class CompanyController extends Controller
         $company->street_address = $request->street_address;
         $company->state = $request->state;
         $company->zip = $request->zip;
-        $company->updated_at = now();
         $company->id = $faker->uuid();
         $company->save();
 
@@ -87,6 +86,7 @@ class CompanyController extends Controller
             ], 404);
         }
     }
+
     /**
      * Update the specified resource in storage.
      *
