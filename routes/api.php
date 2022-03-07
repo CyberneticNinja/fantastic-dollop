@@ -32,23 +32,27 @@ Route::post('register',[AuthenticationController::class,'store']);
 Route::post('makeToken',[AuthenticationController::class,'makeToken']);
 
 Route::group(['middleware' => ['auth:sanctum']],function() {
+    #company routes
     Route::get('company',[CompanyController::class,'index']);
     Route::get('company/{company}',[CompanyController::class,'show']);
     Route::put('company/{company}',[CompanyController::class,'update']);
     Route::post('company',[CompanyController::class,'store']);
     Route::delete('company/{company}',[CompanyController::class,'destroy']);
 
+    #contact routes
     Route::get('contact',[ContactController::class,'index']);
     Route::get('contact/{contact}',[ContactController::class,'show']);
     Route::put('company/{company}',[ContactController::class,'update']);
     Route::post('contact',[ContactController::class,'store']);
     Route::delete('contact/{contact}',[ContactController::class,'destroy']);
 
+    #company - contacts
     Route::get('company-contacts',[CompanyContactController::class,'index']);
     Route::get('company-contacts/{id}',[CompanyContactController::class,'show']);
     Route::put('company-contacts/{id}',[CompanyContactController::class,'update']);
     Route::post('company-contacts',[CompanyContactController::class,'store']);
     Route::delete('company-contacts/{id}',[CompanyContactController::class,'destroy']);
 
+    #delete tokens
     Route::delete('deleteToken',[AuthenticationController::class,'destroy']);
 });
